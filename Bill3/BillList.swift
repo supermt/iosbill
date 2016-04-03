@@ -102,13 +102,13 @@ class BillList: UITableViewController {
         let fillin = BillList.AllListData[indexPath.row]
         // Configure the cell...
         cell.Type.text = fillin.type
-        cell.notes.text = fillin.note
+        cell.notes.text = "备注信息：" + fillin.note
         cell.Money.text = "\(fillin.money)"
         let formater = NSDateFormatter();
         formater.dateStyle = NSDateFormatterStyle.MediumStyle
         let temp = formater.stringFromDate(fillin.date)
         cell.Time.text = temp
-        cell.Tags.text = fillin.tag
+        cell.Tags.text = "标签：" + fillin.tag
         /*if v1.checked{
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
@@ -158,4 +158,6 @@ class BillList: UITableViewController {
         let result = db.execute(sql)
         return result
     }
+    
+
 }

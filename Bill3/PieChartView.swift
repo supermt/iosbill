@@ -44,7 +44,12 @@ class paint: UIView{
     func loadData(){
         items.removeAll()
         db = SQLiteDB.sharedInstance();
-        let data = db.query("Select SUM(money) as Sum,tag from bill group by tag")
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date1 = dateFormatter.stringFromDate(TimingBillList.date1)
+        let date2 = dateFormatter.stringFromDate(TimingBillList.date2)
+        let data = db.query("select SUM(money) as Sum,tag from bill  where date between '\(date1)' AND '\(date2)' Group By date")
         var count = CGFloat.init(integerLiteral: 0);
         if data.count > 0{
             for a in data {

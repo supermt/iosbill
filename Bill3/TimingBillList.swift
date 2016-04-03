@@ -12,7 +12,13 @@ class TimingBillList: UITableViewController {
     var db:SQLiteDB!
     @IBOutlet weak var picker1: UIDatePicker!
     @IBOutlet weak var picker2: UIDatePicker!
+    static var date2 = NSDate()
+    static var date1 = NSDate(timeInterval: -30*24*60*60, sinceDate: date2)
+    
+    
     @IBAction func TimeChanging(sender: UIDatePicker) {
+        TimingBillList.date1 = picker1.date
+        TimingBillList.date2 = picker2.date
         TimingBillList.ShareList.removeAll()
         loadData()
         tableView.reloadData()
@@ -20,7 +26,7 @@ class TimingBillList: UITableViewController {
     static var ShareList = [Bill]()
     override func viewDidLoad() {
         self.tableView!.registerNib(UINib(nibName:"ProtoCell", bundle:nil),forCellReuseIdentifier:"ProtoCell")
-        picker1.date =  NSDate(timeInterval: -30*24*60*60, sinceDate: NSDate())
+        picker1.date =  TimingBillList.date1
         db = SQLiteDB.sharedInstance();
         loadData()
     }
@@ -38,7 +44,7 @@ class TimingBillList: UITableViewController {
         let date2 = dateFormatter.stringFromDate(picker2.date)
         print(date1)
         let data = db.query("select * from bill  where date between '\(date1)' AND '\(date2)' Order By date")
-        print("select * from bill  where date between '\(date1)' AND '\(date2)' Order By date")
+        //print("select * from bill  where date between '\(date1)' AND '\(date2)' Order By date")
         if data.count > 0 {
             //print(data[0])
             for bill in data{
@@ -73,13 +79,13 @@ class TimingBillList: UITableViewController {
         let fillin = TimingBillList.ShareList[indexPath.row]
         // Configure the cell...
         cell.Type.text = fillin.type
-        cell.notes.text = fillin.note
+        cell.notes.text = "备注信息：" + fillin.note
         cell.Money.text = "\(fillin.money)"
         let formater = NSDateFormatter();
         formater.dateStyle = NSDateFormatterStyle.MediumStyle
         let temp = formater.stringFromDate(fillin.date)
         cell.Time.text = temp
-        cell.Tags.text = fillin.tag
+        cell.Tags.text = "标签：" + fillin.tag
         /*if v1.checked{
         cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
